@@ -10,14 +10,14 @@ import ipdb
 
 def main():
     #TODO - run the logger in the main function so the functions can be transfered to a separate file (library)
-    filter_param_dict = {"status": "active", "site" : ["mhkexa", "kentriko", "amerikhs"], "role" : "ac-access-switch", 
+    filter_param_dict = {"status": "active", "site" : ["site1", "site2", "site3"], "role" : "ac-access-switch", 
                 "has_primary_ip": True}
     mac_list = get_the_macs_addresses(nautobot_url,nautobot_token,filter_param_dict,SAVE_RESULTS=False,DEBUG_DATA=False,DATA_LOGGING=False)
     if mac_list == None:
         print("no mac addresses were collected")
         return()
     
-    filter_param_dict = {"status": "active", "site" : ["mhkexa", "kentriko", "amerikhs"], "role" : "ac-distribution-switch", 
+    filter_param_dict = {"status": "active", "site" : ["site1", "site2", "site3"], "role" : "ac-distribution-switch", 
                 "has_primary_ip": True}
     arp_list = get_the_arps(nautobot_url,nautobot_token,filter_param_dict,SAVE_RESULTS=False,DEBUG_DATA=False,DATA_LOGGING=True)
     if arp_list == None:
@@ -41,7 +41,7 @@ def main():
 
     for record in final_list:
         #p = influxdb_client.Point("mac-address-access-network-attiki").tag("mac-address", record['mac_address']).field("temperature", 25.3)
-        p = Point("mac-address-access-network-attiki"
+        p = Point("mac-address-access-network"
             ).tag("switch_address",record["switch_address"]
             ).tag("switch_name",record["switch_name"]
             ).tag("port",record["port"]

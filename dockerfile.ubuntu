@@ -1,0 +1,22 @@
+FROM ubuntu:22.04
+LABEL org.opencontainers.image.authors="your@email.com"
+
+RUN mkdir /gathernodedata
+COPY requirements.txt /gathernodedata/requirements.txt
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends vim iputils-ping openssh-client build-essential python3-pip\
+ && pip install --upgrade --no-cache-dir setuptools pip \
+ && pip install --requirement /gathernodedata/requirements.txt \
+ && chmod 775 /gathernodedata \
+ && apt-get remove -y build-essential\
+ && apt-get autoremove -y\
+ && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY code/*.py /gathernodedata/
+
+WORKDIR /gathernodedata
+
+ENTRYPOINT [ "python3", "gather_node_data.py"]
